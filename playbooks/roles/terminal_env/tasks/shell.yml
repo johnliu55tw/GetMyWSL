@@ -1,0 +1,109 @@
+---
+- name: Ensure local bin folder exists
+  become_user: "{{ env_user }}"
+  ansible.builtin.file:
+    path: "~/.local/bin"
+    state: directory
+
+- name: Ensure bashrc.d folder exists
+  become_user: "{{ env_user }}"
+  ansible.builtin.file:
+    path: "~/.bashrc.d"
+    state: directory
+
+- name: Install ZSH
+  become: yes
+  ansible.builtin.apt:
+    name: zsh
+    state: present
+
+- name: Make ZSH the default shell
+  become: yes
+  ansible.builtin.shell: "chsh -s /bin/zsh {{ env_user }}"
+
+- name: Check oh-my-zsh is installed
+  become_user: "{{ env_user }}"
+  ansible.builtin.stat:
+    path: "~/.oh-my-zsh"
+  register: result
+    
+- name: Install oh-my-zsh
+  when: not result.stat.exists
+  become_user: "{{ env_user }}"
+  ansible.builtin.shell: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+
+- name: Install shell utilities
+  become: yes
+  ansible.builtin.apt:
+    state: present
+    name:
+    - ripgrep
+    - colordiff
+    - entr
+    - keychain
+    - fzf
+    - fd-find
+
+- name: Create ZSH bd plugin directory
+  become_user: "{{ env_user }}"
+  ansible.builtin.file:
+    path: "~/.oh-my-zsh/custom/plugins/bd"
+    state: directory
+
+- name: Install ZSH bd
+  become_user: "{{ env_user }}"
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/Tarrasch/zsh-bd/master/bd.zsh"
+    dest: "~/.oh-my-zsh/custom/plugins/bd/bd.plugin.zsh"
+    mode: 0644
+    force: yes
+
+- name: Copy .zshrc
+  become_user: "{{ env_user }}"
+  ansible.builtin.copy:
+    src: "zsh/.zshrc"
+    dest: "~/.zshrc"
+
+- name: Copy ZSH custom
+  become_user: "{{ env_user }}"
+  ansible.builtin.copy:
+    src: "zsh/custom/"
+    dest: "~/.oh-my-zsh/custom/"
+
+- name: Install tmux
+  become: yes
+  ansible.builtin.apt:
+    name:
+    - tmux
+    state: present
+
+- name: Ensure the directory for TPM exists
+  become_user: "{{ env_user }}"
+  ansible.builtin.file:
+    path: "~/.tmux/plugins"
+    state: directory
+
+- name: Install TPM
+  become_user: "{{ env_user }}"
+  ansible.builtin.git:
+    update: yes
+    repo: "https://github.com/tmux-plugins/tpm"
+    dest: "~/.tmux/plugins/tpm"
+
+- name: Copy tmux config file
+  become_user: "{{ env_user }}"
+  ansible.builtin.copy:
+    src: "tmux/.tmux.conf"
+    dest: "~/.tmux.conf"
+
+- name: Adjust plugin tmux-yank copy command for system without graphical interface
+  become_user: "{{ env_user }}"
+  ansible.builtin.lineinfile:
+    path: "~/.tmux.conf"
+    line: "set -g @override_copy_command 'tee > /dev/null'"
+    insertafter: ".*tmux-yank.*"
+    state: present
+
+- name: Install TPM plugins
+  become_user: "{{ env_user }}"
+  ansible.builtin.shell: "~/.tmux/plugins/tpm/bin/install_plugins"

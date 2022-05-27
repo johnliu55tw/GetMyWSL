@@ -1,0 +1,9 @@
+---
+# Go should be installed before nvim cause vim-go requires go get command
+- name: Install
+  include_tasks: "{{ item }}"
+  loop:
+    - shell.yml
+    # - vim.yml
+    # - git.yml
+    # - kubernetes.yml
