@@ -1,0 +1,21 @@
+---
+- name: Install git
+  become: yes
+  ansible.builtin.apt:
+    name: git
+
+- name: Add diff-so-fancy PPA
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: ppa:aos1/diff-so-fancy
+
+- name: Install diff-so-fancy
+  become: yes
+  ansible.builtin.apt:
+    name: diff-so-fancy
+
+- name: Copy gitconfig
+  become_user: "{{ env_user }}"
+  ansible.builtin.copy:
+    src: "git/.gitconfig"
+    dest: "~/.gitconfig"

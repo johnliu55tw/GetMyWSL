@@ -4,6 +4,6 @@
   include_tasks: "{{ item }}"
   loop:
     - shell.yml
-    # - vim.yml
-    # - git.yml
+    - vim.yml
+    - git.yml
     # - kubernetes.yml
