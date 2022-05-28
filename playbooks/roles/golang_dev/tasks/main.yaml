@@ -1,0 +1,37 @@
+---
+- name: Install goenv
+  become_user: "{{ env_user }}"
+  ansible.builtin.git:
+    update: yes
+    repo: "https://github.com/syndbg/goenv.git"
+    dest: "~/.goenv"
+
+- name: Enable goenv
+  become_user: "{{ env_user }}"
+  ansible.builtin.copy:
+    src: "goenv.zsh"
+    dest: "~/.oh-my-zsh/custom/"
+
+- name: Install Go via goenv
+  become_user: "{{ env_user }}"
+  shell: ". ~/.oh-my-zsh/custom/goenv.zsh; goenv install -s -v {{ go_version }}"
+
+- name: Set global default Go
+  become_user: "{{ env_user }}"
+  shell: ". ~/.oh-my-zsh/custom/goenv.zsh; goenv global {{ go_version }}"
+
+- name: Install gopls
+  become_user: "{{ env_user }}"
+  shell: ". ~/.oh-my-zsh/custom/goenv.zsh; go install golang.org/x/tools/gopls@latest"
+
+- name: Install staticcheck
+  become_user: "{{ env_user }}"
+  shell: ". ~/.oh-my-zsh/custom/goenv.zsh; go install honnef.co/go/tools/cmd/staticcheck@latest"
+
+- name: Install goimports
+  become_user: "{{ env_user }}"
+  shell: ". ~/.oh-my-zsh/custom/goenv.zsh; go install golang.org/x/tools/cmd/goimports@latest"
+
+- name: Install delve (Go debbuer)
+  become_user: "{{ env_user }}"
+  shell: ". ~/.oh-my-zsh/custom/goenv.zsh; go install github.com/go-delve/delve/cmd/dlv@latest"
