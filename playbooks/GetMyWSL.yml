@@ -2,7 +2,6 @@
 - hosts: all
   roles:
   - role: terminal_env
-  # - role: neovim
-  # - role: docker
+  - role: docker
   - role: python_dev
-  # - role: golang_dev
+  - role: golang_dev
