@@ -6,4 +6,4 @@
     - shell.yml
     - vim.yml
     - git.yml
-    # - kubernetes.yml
+    - kubernetes.yml
