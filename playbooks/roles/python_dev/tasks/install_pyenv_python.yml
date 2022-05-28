@@ -1,0 +1,27 @@
+---
+- debug:
+    msg: "Install Python {{ python_version }} through pyenv"
+
+- name: Install specified Python version
+  become_user: "{{ env_user }}"
+  shell: ". ~/.oh-my-zsh/custom/pyenv.zsh; pyenv install -s -v {{ python_version }}"
+
+- name: Upgrade pip for the installed Python
+  become_user: "{{ env_user }}"
+  environment:
+    PYENV_VERSION: "{{python_version}}"
+  shell: ". ~/.oh-my-zsh/custom/pyenv.zsh; pip install --upgrade pip"
+
+- name: Install development environment for the installed Python
+  become_user: "{{ env_user }}"
+  environment:
+    PYENV_VERSION: "{{python_version}}"
+  shell: ". ~/.oh-my-zsh/custom/pyenv.zsh; pip install {{ package }}"
+  loop:
+    - ipython
+    - flake8
+    - virtualenv
+    - requests
+    - flask
+  loop_control:
+    loop_var: package

@@ -4,5 +4,5 @@
   - role: terminal_env
   # - role: neovim
   # - role: docker
-  # - role: python_dev
+  - role: python_dev
   # - role: golang_dev

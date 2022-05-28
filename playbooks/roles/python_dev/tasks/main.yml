@@ -1,0 +1,46 @@
+---
+- name: Install pyenv build dependencies
+  become: yes
+  ansible.builtin.apt:
+    name:
+    - make
+    - build-essential
+    - libssl-dev
+    - zlib1g-dev
+    - libbz2-dev
+    - libreadline-dev
+    - libsqlite3-dev
+    - wget
+    - curl
+    - llvm
+    - libncursesw5-dev
+    - xz-utils
+    - tk-dev
+    - libxml2-dev
+    - libxmlsec1-dev
+    - libffi-dev
+    - liblzma-dev
+
+- name: Clone pyenv
+  become_user: "{{ env_user }}"
+  ansible.builtin.git:
+    update: yes
+    repo: "https://github.com/pyenv/pyenv.git"
+    dest: "~/.pyenv"
+
+- name: Compile Bash extension to speed up pyenv (optional)
+  become_user: "{{ env_user }}"
+  ansible.builtin.shell: "cd ~/.pyenv && src/configure && make -C src"
+  ignore_errors: yes
+
+- name: Enable pyenv
+  become_user: "{{ env_user }}"
+  ansible.builtin.copy:
+    src: "pyenv.zsh"
+    dest: "~/.oh-my-zsh/custom/"
+
+- name: Install specified Python version via pyenv
+  include_tasks: install_pyenv_python.yml
+  loop: "{{ query('flattened', python_versions) }}"
+  loop_control:
+    loop_var: python_version
