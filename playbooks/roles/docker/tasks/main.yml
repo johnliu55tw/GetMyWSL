@@ -22,3 +22,8 @@
     append: yes
     groups:
     - docker
+
+- name: Clean up
+  ansible.builtin.file:
+    path: ~/docker-install
+    state: absent
