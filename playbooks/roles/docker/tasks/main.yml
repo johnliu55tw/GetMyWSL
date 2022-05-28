@@ -1,0 +1,24 @@
+---
+- name: Pull docker-install repository
+  become_user: "{{ env_user }}"
+  ansible.builtin.git:
+    update: yes
+    repo: https://github.com/docker/docker-install.git
+    dest: "~/docker-install"
+
+- name: Check whether docker is installed
+  ansible.builtin.stat:
+    path: "/usr/bin/dockerd"
+  register: result
+
+- name: Install docker via docker-install script if not installed
+  when: not result.stat.exists
+  ansible.builtin.shell: "sh ~/docker-install/install.sh"
+
+- name: Add env user to docker group
+  become: yes
+  ansible.builtin.user:
+    name: "{{ env_user }}"
+    append: yes
+    groups:
+    - docker
