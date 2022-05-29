@@ -23,6 +23,11 @@
     groups:
     - docker
 
+- name: Start docker service
+  ansible.builtin.copy:
+    src: "docker-service.zsh"
+    dest: "~/.oh-my-zsh/custom/"
+
 - name: Clean up
   ansible.builtin.file:
     path: ~/docker-install
