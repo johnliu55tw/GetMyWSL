@@ -1,4 +1,4 @@
-# Get my environment READY!!
+# Get my environment READY, in WSL!!
 
 I don't wanna spend a whole day setting up my development environment,
 get me my environment NOW!!
@@ -21,6 +21,7 @@ are running locally and wish Ansible to prompt for `sudo` password.
 * **`env_has_wayland`**: Whether the system has Wayland enabled. This could affect several configurations.
 * **`python_versions`**: Required Python versions to be installed by `pyenv`.
   Default is `2.7.15` and `3.6.8`.
+* **`go_version`**: Go version to install (using `goenv`).
 
 ## Requirements on the target system
 
