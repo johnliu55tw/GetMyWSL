@@ -1,0 +1,20 @@
+---
+- name: Copy WSL config
+  become: yes
+  ansible.builtin.copy:
+    src: wsl.conf
+    dest: /etc/wsl.conf
+    mode: 0644
+
+- name: Remove the old resolv.conf
+  become: yes
+  ansible.builtin.file:
+    path: /etc/resolv.conf
+    state: absent
+
+- name: Create new resolv.conf
+  become: yes
+  ansible.builtin.copy:
+    src: resolv.conf
+    dest: /etc/resolv.conf
+    mode: 0644

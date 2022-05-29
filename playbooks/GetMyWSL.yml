@@ -1,6 +1,7 @@
 ---
 - hosts: all
   roles:
+  - role: system
   - role: terminal_env
   - role: docker
   - role: python_dev
