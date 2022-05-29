@@ -32,6 +32,6 @@
   become_user: "{{ env_user }}"
   shell: ". ~/.oh-my-zsh/custom/goenv.zsh; go install golang.org/x/tools/cmd/goimports@latest"
 
-- name: Install delve (Go debbuer)
+- name: Install delve (Go debugger)
   become_user: "{{ env_user }}"
   shell: ". ~/.oh-my-zsh/custom/goenv.zsh; go install github.com/go-delve/delve/cmd/dlv@latest"
