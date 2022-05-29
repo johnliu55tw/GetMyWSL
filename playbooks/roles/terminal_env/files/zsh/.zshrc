@@ -28,7 +28,13 @@ HIST_STAMPS="%Y-%m-%d %T"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git bd fzf kubectl)
+plugins=(git bd fzf kubectl keychain)
+
+# Plugin config: Keychaing
+## Only enable ssh
+zstyle :omz:plugins:keychain agents ssh
+## Specify the identity
+zstyle :omz:plugins:keychain identities id_ed25519
 
 source $ZSH/oh-my-zsh.sh
 

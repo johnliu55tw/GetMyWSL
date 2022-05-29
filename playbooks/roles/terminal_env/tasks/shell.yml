@@ -43,6 +43,7 @@
     - keychain
     - fzf
     - fd-find
+    - keychain
 
 - name: Create ZSH bd plugin directory
   become_user: "{{ env_user }}"
