@@ -12,6 +12,7 @@
 - name: Install diff-so-fancy
   become: yes
   ansible.builtin.apt:
+    update_cache: yes
     name: diff-so-fancy
 
 - name: Copy gitconfig

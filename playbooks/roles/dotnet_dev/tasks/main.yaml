@@ -1,0 +1,21 @@
+---
+- name: Download Microsoft packages definitions
+  ansible.builtin.get_url:
+    url: "https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb"
+    dest: "/tmp/package-microsoft-prod.deb"
+    mode: 0755
+    force: yes
+
+- name: Install package definition
+  become: yes
+  shell: "dpkg -i /tmp/package-microsoft-prod.deb"
+
+- name: Remove package definition
+  ansible.builtin.file:
+    path: "/tmp/package-microsoft-prod.deb"
+    state: absent
+
+- name: Install dotnet
+  ansible.builtin.apt:
+    update_cache: yes
+    name: dotnet-sdk-6.0
