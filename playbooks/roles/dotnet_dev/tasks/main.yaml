@@ -16,6 +16,7 @@
     state: absent
 
 - name: Install dotnet
+  become: yes
   ansible.builtin.apt:
     update_cache: yes
     name: dotnet-sdk-6.0
