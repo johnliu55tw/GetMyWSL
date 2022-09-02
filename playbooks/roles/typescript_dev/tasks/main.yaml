@@ -1,0 +1,22 @@
+---
+- name: Download Node.js 16.x installation script
+  ansible.builtin.get_url:
+    url: "https://deb.nodesource.com/setup_16.x"
+    dest: "/tmp/nodejs-setup.sh"
+    mode: 0755
+    force: yes
+
+- name: Run Node.js 16.x
+  become: yes
+  shell: "bash /tmp/nodejs-setup.sh"
+
+- name: Install Node.js 16.x
+  become: yes
+  ansible.builtin.apt:
+    name: nodejs
+    state: present
+
+- name: Install TypeScript compiler
+  become_user: "{{ env_user }}"
+  shell: "npm install typescript"
+
