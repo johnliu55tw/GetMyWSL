@@ -1,0 +1,21 @@
+---
+- name: Fetch Github CLI keyring
+  become: yes
+  ansible.builtin.get_url:
+    url: "https://cli.github.com/packages/githubcli-archive-keyring.gpg"
+    dest: "/usr/share/keyrings/githubcli-archive-keyring.gpg"
+    mode: 0644
+    force: yes
+
+- name: Copy sources.lit
+  become: yes
+  ansible.builtin.copy:
+    src: "github-cli/github-cli.list"
+    dest: "/etc/apt/sources.list.d/github-cli.list"
+
+- name: Install Github CLI
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+    name: gh
+    state: present
