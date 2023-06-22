@@ -1,0 +1,36 @@
+---
+- name: Install neovim
+  become: yes
+  ansible.builtin.apt:
+    name:
+    - neovim
+    - python3-neovim
+    state: present
+
+- name: Ensure ~/.config/nvim/autoload exists
+  become_user: "{{ env_user }}"
+  file:
+    path: "~/.config/nvim/autoload"
+    state: directory
+
+- name: Install vim-plug
+  become_user: "{{ env_user }}"
+  get_url:
+    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: "~/.config/nvim/autoload/plug.vim"
+    force: yes
+
+- name: Copy nvim config directory
+  become_user: "{{ env_user }}"
+  ansible.builtin.copy:
+    src: "neovim/"
+    dest: "~/.config/nvim/"
+
+- name: Installing plugins by vim-plug
+  shell: "nvim -u $HOME/.config/nvim/init-plug.vim -c PlugClean! -c PlugInstall -c qa"
+
+- name: Copy vimrc
+  become_user: "{{ env_user }}"
+  ansible.builtin.copy:
+    src: "vim/.vimrc"
+    dest: "~/.vimrc"
