@@ -7,3 +7,4 @@
   - role: python_dev
   - role: golang_dev
   - role: dotnet_dev
+  - role: javascript_dev

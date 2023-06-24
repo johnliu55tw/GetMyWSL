@@ -1,0 +1,15 @@
+---
+- name: Download latest NVM installation script
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh"
+    dest: /tmp/nvm-install.sh
+
+- name: Install NVM
+  ansible.builtin.shell: "bash /tmp/nvm-install.sh --no-use"
+  environment:
+    PROFILE: "/dev/null" # Don't set up zsh profile as it will be enabled by zsh plugin
+
+- name: Clean up
+  ansible.builtin.file:
+    path: /tmp/nvm-install.sh
+    state: absent
