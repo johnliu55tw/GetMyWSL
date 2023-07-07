@@ -3,6 +3,7 @@
   roles:
   - role: system
   - role: terminal_env
+  - role: azure_dev
   - role: docker
   - role: python_dev
   - role: golang_dev

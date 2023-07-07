@@ -1,0 +1,32 @@
+---
+- name: Install prerequisites
+  become: yes
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - curl
+    - gnupg
+    - lsb-release
+    - ca-certificates
+    - apt-transport-https
+
+- name: Add Microsoft key
+  become: yes
+  ansible.builtin.apt_key:
+    url: https://packages.microsoft.com/keys/microsoft.asc
+    state: present
+
+- name: Add Azure CLI repository
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_distribution_release }} main"
+    state: present
+    filename: azure-cli
+    update_cache: yes
+
+- name: Install Azure CLI
+  become: yes
+  ansible.builtin.apt:
+    name: azure-cli
+    state: present
